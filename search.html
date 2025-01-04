@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Intern</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #002147;
+            color: #fff;
+            height: 100vh;
+            padding-top: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            cursor: pointer;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #00509e;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            background-color: #002147;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #002147;
+        }
+
+        .result {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+
+        .feedback-form button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #002147;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .feedback-form button:hover {
+            background-color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="admindashb.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="search.html"><i class="fas fa-search"></i> Search</a></li>
+                <li><a href="stock.html">Store & Requisition</a></li>
+                <li><a href="edit_profile.html"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h1>Admin Dashboard</h1>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Enter Intern Name">
+                <select id="roleSelect">
+                    <option value="">Select Role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Employee">Employee</option>
+                    <option value="Intern">Intern</option>
+                    <option value="Trainer">Trainer</option>
+                </select>
+                <button onclick="searchIntern()">Search</button>
+            </div>
+
+            <!-- Search Result -->
+            <div id="searchResult" class="result" style="display: none;">
+                <h2>Summary of <span id="internName"></span></h2>
+                <ul id="taskList">
+                    <!-- Task list will be populated here -->
+                </ul>
+                <p><strong>Weekly Participation:</strong> <span id="weeklyParticipation"></span></p>
+                <p><strong>Weekly Transport Fee:</strong> <span id="transportFee"></span></p>
+                <p><strong>Supervisor Name:</strong> <span id="supervisorName"></span></p>
+
+                <!-- Feedback Form -->
+                <div class="feedback-form">
+                    <h3>Feedback to <span id="feedbackInternName"></span></h3>
+                    <textarea id="feedback" placeholder="Type feedback..."></textarea>
+                    <button onclick="sendFeedback()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchIntern() {
+            const internName = document.getElementById('searchInput').value;
+            const role = document.getElementById('roleSelect').value;
+
+            if (internName.trim() !== '') {
+                fetch('search_intern.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: internName, role: role })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('searchResult').style.display = 'block';
+                        document.getElementById('internName').innerText = internName;
+                        document.getElementById('feedbackInternName').innerText = internName;
+                        document.getElementById('taskList').innerHTML = data.tasks.map(task => `<li><a href="${task.file}">${task.name}</a></li>`).join('');
+                        document.getElementById('weeklyParticipation').innerText = data.weeklyParticipation;
+                        document.getElementById('transportFee').innerText = data.transportFee;
+                        document.getElementById('supervisorName').innerText = data.supervisorName;
+                    } else {
+                        alert('Person not found in the database.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please enter an intern name to search.');
+            }
+        }
+
+        function sendFeedback() {
+            const feedback = document.getElementById('feedback').value;
+            if (feedback.trim() !== '') {
+                alert('Feedback sent successfully!');
+                document.getElementById('feedback').value = '';
+            } else {
+                alert('Please write feedback before sending.');
+            }
+        }
+    </script>
+</body>
+</html>
