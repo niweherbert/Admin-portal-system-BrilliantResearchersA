@@ -1,30 +1,24 @@
 <?php
-include 'searchdb.php';
+$conn = new mysqli("localhost", "root", "", "brilliant_researchers");
 
-$type = $_GET['type'];
-$response = ['success' => false, 'list' => []];
-
-if ($type === 'name') {
-    $sql = "SELECT DISTINCT name FROM daily_reports";
-} elseif ($type === 'date') {
-    $sql = "SELECT DISTINCT date FROM daily_reports";
-} elseif ($type === 'role') {
-    $sql = "SELECT DISTINCT role FROM daily_reports";
-} else {
-    echo json_encode($response);
-    exit;
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-$result = $conn->query($sql);
+$valid_columns = ['id', 'name', 'date']; // Add valid columns here
 
-if ($result->num_rows > 0) {
+if (isset($_GET['sort']) && in_array($_GET['sort'], $valid_columns)) {
+    $sort = $conn->real_escape_string($_GET['sort']);
+    $query = "SELECT id, $sort FROM daily_reports ORDER BY $sort";
+    $result = $conn->query($query);
+    $data = [];
     while ($row = $result->fetch_assoc()) {
-        $response['list'][] = $row[$type];
+        $data[] = $row;
     }
-    $response['success'] = true;
+    echo json_encode($data);
+} else {
+    echo json_encode(['error' => 'Invalid sort column']);
 }
-
-echo json_encode($response);
 
 $conn->close();
 ?>

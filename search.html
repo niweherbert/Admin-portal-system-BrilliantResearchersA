@@ -3,272 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Intern</title>
+    <title>Search and Sort Researchers</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            margin: 20px;
+            background-color: #f4f4f9;
         }
-
-        .container {
-            display: flex;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #002147;
-            color: #fff;
-            height: 100vh;
-            padding-top: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar ul li {
-            padding: 15px 20px;
+        .sort-btn {
+            padding: 10px;
             cursor: pointer;
-        }
-
-        .sidebar ul li:hover {
-            background-color: #00509e;
-        }
-
-        .sidebar ul li a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-
-        .search-bar button {
-            padding: 10px;
-            background-color: #002147;
+            background-color: #007BFF;
             color: white;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            border-radius: 5px;
+            display: block;
+            margin: 20px auto;
+            transition: background-color 0.3s;
         }
-
-        .search-bar button:hover {
-            background-color: #002147;
+        .sort-btn:hover {
+            background-color: #0056b3;
         }
-
-        .filter-icon {
-            cursor: pointer;
-            margin-left: 10px;
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
         }
-
-        .filter-dropdown {
+        .dropdown-content {
             display: none;
             position: absolute;
             background-color: #f9f9f9;
+            min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
-            top: 40px;
-            right: 0;
+            left: 50%;
+            transform: translateX(-50%);
         }
-
-        .filter-dropdown a {
+        .dropdown-content a {
             color: black;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
+            transition: background-color 0.3s;
         }
-
-        .filter-dropdown a:hover {
+        .dropdown-content a:hover {
             background-color: #f1f1f1;
         }
-
-        .result {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
-
-        .feedback-form textarea {
-            width: 100%;
-            height: 100px;
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: none;
-        }
-
-        .feedback-form button {
-            margin-top: 10px;
-            padding: 10px;
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            top: 0;
+            left: 0;
             background-color: #002147;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding-top: 20px;
         }
-
-        .feedback-form button:hover {
-            background-color: #003366;
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        #results div {
+            padding: 10px;
+            background-color: white;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        #results div:hover {
+            background-color: #f1f1f1;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <div class="sidebar">
-            <ul>
-                <li><a href="admindashb.html"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="search.html"><i class="fas fa-search"></i> Search</a></li>
-                <li><a href="stock.html">Store & Requisition</a></li>
-                <li><a href="edit_profile.html"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
-            </ul>
-        </div>
-
-        <div class="content">
-            <h1>Admin Dashboard</h1>
-
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Enter Intern Name">
-                <button onclick="searchIntern()">Search</button>
-                <i class="fas fa-filter filter-icon" onclick="toggleFilterDropdown()"></i>
-                <div id="filterDropdown" class="filter-dropdown">
-                    <a href="#" onclick="filterBy('name')">Filter by Name</a>
-                    <a href="#" onclick="filterBy('date')">Filter by Date</a>
-                    <a href="#" onclick="filterBy('role')">Filter by Role</a>
-                </div>
-            </div>
-
-            <!-- Search Result -->
-            <div id="searchResult" class="result" style="display: none;">
-                <h2>Summary of <span id="internName"></span></h2>
-                <ul id="taskList">
-                    <!-- Task list will be populated here -->
-                </ul>
-                <p><strong>Weekly Participation:</strong> <span id="weeklyParticipation"></span></p>
-                <p><strong>Weekly Transport Fee:</strong> <span id="transportFee"></span></p>
-                <p><strong>Supervisor Name:</strong> <span id="supervisorName"></span></p>
-                <p><strong>Time Arrived:</strong> <span id="timeArrived"></span></p>
-                <p><strong>Time Left:</strong> <span id="timeLeft"></span></p>
-                <p><strong>Transport Amount:</strong> <span id="transportAmount"></span></p>
-                <p><strong>Date:</strong> <span id="date"></span></p>
-
-                <!-- Feedback Form -->
-                <div class="feedback-form">
-                    <h3>Feedback to <span id="feedbackInternName"></span></h3>
-                    <textarea id="feedback" placeholder="Type feedback..."></textarea>
-                    <button onclick="sendFeedback()">Send</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        function toggleFilterDropdown() {
-            const dropdown = document.getElementById('filterDropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function filterBy(type) {
-            fetch(`filter_intern.php?type=${type}`)
+        function fetchData(sort) {
+            fetch('search_intern.php?sort=' + sort)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        const filterList = data.list.map(item => `<li onclick="fetchDetails('${type}', '${item}')">${item}</li>`).join('');
-                        document.getElementById('searchResult').innerHTML = `<ul>${filterList}</ul>`;
-                        document.getElementById('searchResult').style.display = 'block';
+                    const container = document.getElementById('results');
+                    container.innerHTML = '';
+                    if (data.error) {
+                        container.innerHTML = `<p>${data.error}</p>`;
                     } else {
-                        alert('No data found.');
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            const link = document.createElement('a');
+                            link.href = '#';
+                            link.textContent = item[sort];
+                            link.onclick = function() {
+                                fetchDetails(sort, item[sort]);
+                            };
+                            div.appendChild(link);
+                            container.appendChild(div);
+                        });
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
 
         function fetchDetails(type, value) {
-            fetch(`fetch_details.php?type=${type}&value=${encodeURIComponent(value)}`)
+            fetch('details_intern.php?type=' + type + '&value=' + value)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        document.getElementById('searchResult').style.display = 'block';
-                        document.getElementById('internName').innerText = data.data.name;
-                        document.getElementById('feedbackInternName').innerText = data.data.name;
-                        document.getElementById('taskList').innerHTML = `<li><a href="${data.data.file_upload}">${data.data.tasks_performed}</a></li>`;
-                        document.getElementById('weeklyParticipation').innerText = data.data.weekly_participation;
-                        document.getElementById('transportFee').innerText = data.data.transport_fee;
-                        document.getElementById('supervisorName').innerText = data.data.supervisor_name;
-                        document.getElementById('timeArrived').innerText = data.data.time_arrived;
-                        document.getElementById('timeLeft').innerText = data.data.time_left;
-                        document.getElementById('transportAmount').innerText = data.data.transport_amount;
-                        document.getElementById('date').innerText = data.data.date;
+                    const container = document.getElementById('results');
+                    container.innerHTML = '';
+                    if (data.error) {
+                        container.innerHTML = `<p>${data.error}</p>`;
                     } else {
-                        alert('Details not found.');
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.textContent = JSON.stringify(item);
+                            container.appendChild(div);
+                        });
                     }
                 })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function searchIntern() {
-            const internName = document.getElementById('searchInput').value;
-
-            if (internName.trim() !== '') {
-                fetch('search_intern.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name: internName })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('searchResult').style.display = 'block';
-                        document.getElementById('internName').innerText = internName;
-                        document.getElementById('feedbackInternName').innerText = internName;
-                        document.getElementById('taskList').innerHTML = data.tasks.map(task => `<li><a href="${task.file}">${task.name}</a></li>`).join('');
-                        document.getElementById('weeklyParticipation').innerText = data.weeklyParticipation;
-                        document.getElementById('transportFee').innerText = data.transportFee;
-                        document.getElementById('supervisorName').innerText = data.supervisorName;
-                    } else {
-                        alert('Person not found in the database.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                alert('Please enter an intern name to search.');
-            }
-        }
-
-        function sendFeedback() {
-            const feedback = document.getElementById('feedback').value;
-            if (feedback.trim() !== '') {
-                alert('Feedback sent successfully!');
-                document.getElementById('feedback').value = '';
-            } else {
-                alert('Please write feedback before sending.');
-            }
+                .catch(error => {
+                    console.error('Error fetching details:', error);
+                });
         }
     </script>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="admindashb.html">Home</a>
+        <a href="search.html">Search</Search></a>
+        <a href="stock.html">Store & Requisition</a>
+        <a href="edit_profile.html">Edit Profile</a>
+    </div>
+    <div class="content">
+        <h1>Brilliant Researchers</h1>
+        <div class="dropdown">
+            <button class="sort-btn">Sort Options</button>
+            <div class="dropdown-content">
+                <a href="#" onclick="fetchData('name')">Sort by Name</a>
+                <a href="#" onclick="fetchData('date')">Sort by Date</a>
+            </div>
+        </div>
+        <div id="results"></div>
+    </div>
 </body>
 </html>
