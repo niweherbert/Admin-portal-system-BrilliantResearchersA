@@ -41,12 +41,6 @@
         .sidebar ul li a {
             color: white;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar ul li a i {
-            margin-right: 10px;
         }
 
         .content {
@@ -58,10 +52,10 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            position: relative;
         }
 
-        .search-bar input,
-        .search-bar select {
+        .search-bar input {
             padding: 10px;
             width: 200px;
             border: 1px solid #ccc;
@@ -80,6 +74,32 @@
 
         .search-bar button:hover {
             background-color: #002147;
+        }
+
+        .filter-icon {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .filter-dropdown {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 40px;
+            right: 0;
+        }
+
+        .filter-dropdown a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .filter-dropdown a:hover {
+            background-color: #f1f1f1;
         }
 
         .result {
@@ -113,6 +133,7 @@
             background-color: #003366;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -131,14 +152,13 @@
             <!-- Search Bar -->
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="Enter Intern Name">
-                <select id="roleSelect">
-                    <option value="">Select Role</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Employee">Employee</option>
-                    <option value="Intern">Intern</option>
-                    <option value="Trainer">Trainer</option>
-                </select>
                 <button onclick="searchIntern()">Search</button>
+                <i class="fas fa-filter filter-icon" onclick="toggleFilterDropdown()"></i>
+                <div id="filterDropdown" class="filter-dropdown">
+                    <a href="#" onclick="filterBy('name')">Filter by Name</a>
+                    <a href="#" onclick="filterBy('date')">Filter by Date</a>
+                    <a href="#" onclick="filterBy('role')">Filter by Role</a>
+                </div>
             </div>
 
             <!-- Search Result -->
@@ -150,6 +170,10 @@
                 <p><strong>Weekly Participation:</strong> <span id="weeklyParticipation"></span></p>
                 <p><strong>Weekly Transport Fee:</strong> <span id="transportFee"></span></p>
                 <p><strong>Supervisor Name:</strong> <span id="supervisorName"></span></p>
+                <p><strong>Time Arrived:</strong> <span id="timeArrived"></span></p>
+                <p><strong>Time Left:</strong> <span id="timeLeft"></span></p>
+                <p><strong>Transport Amount:</strong> <span id="transportAmount"></span></p>
+                <p><strong>Date:</strong> <span id="date"></span></p>
 
                 <!-- Feedback Form -->
                 <div class="feedback-form">
@@ -162,9 +186,51 @@
     </div>
 
     <script>
+        function toggleFilterDropdown() {
+            const dropdown = document.getElementById('filterDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function filterBy(type) {
+            fetch(`filter_intern.php?type=${type}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const filterList = data.list.map(item => `<li onclick="fetchDetails('${type}', '${item}')">${item}</li>`).join('');
+                        document.getElementById('searchResult').innerHTML = `<ul>${filterList}</ul>`;
+                        document.getElementById('searchResult').style.display = 'block';
+                    } else {
+                        alert('No data found.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function fetchDetails(type, value) {
+            fetch(`fetch_details.php?type=${type}&value=${encodeURIComponent(value)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('searchResult').style.display = 'block';
+                        document.getElementById('internName').innerText = data.data.name;
+                        document.getElementById('feedbackInternName').innerText = data.data.name;
+                        document.getElementById('taskList').innerHTML = `<li><a href="${data.data.file_upload}">${data.data.tasks_performed}</a></li>`;
+                        document.getElementById('weeklyParticipation').innerText = data.data.weekly_participation;
+                        document.getElementById('transportFee').innerText = data.data.transport_fee;
+                        document.getElementById('supervisorName').innerText = data.data.supervisor_name;
+                        document.getElementById('timeArrived').innerText = data.data.time_arrived;
+                        document.getElementById('timeLeft').innerText = data.data.time_left;
+                        document.getElementById('transportAmount').innerText = data.data.transport_amount;
+                        document.getElementById('date').innerText = data.data.date;
+                    } else {
+                        alert('Details not found.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
         function searchIntern() {
             const internName = document.getElementById('searchInput').value;
-            const role = document.getElementById('roleSelect').value;
 
             if (internName.trim() !== '') {
                 fetch('search_intern.php', {
@@ -172,7 +238,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name: internName, role: role })
+                    body: JSON.stringify({ name: internName })
                 })
                 .then(response => response.json())
                 .then(data => {
