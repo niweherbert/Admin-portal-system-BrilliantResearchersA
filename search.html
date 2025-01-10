@@ -4,54 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search and Sort Researchers</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             background-color: #f4f4f9;
-        }
-        .sort-btn {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            display: block;
-            margin: 20px auto;
-            transition: background-color 0.3s;
-        }
-        .sort-btn:hover {
-            background-color: #0056b3;
-        }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            text-align: center;
-            width: 100%;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background-color 0.3s;
-        }
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
         }
         .sidebar {
             height: 100%;
@@ -73,9 +31,47 @@
         .sidebar a:hover {
             background-color: #575757;
         }
+        .icon-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #002147;
+            color: white;
+            padding: 10px 15px;
+            margin-left: 200px; /* To account for sidebar */
+        }
+        .icon-bar i {
+            font-size: 24px;
+            cursor: pointer;
+        }
         .content {
             margin-left: 220px;
             padding: 20px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
         #results div {
             padding: 10px;
@@ -84,30 +80,98 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transition: background-color 0.3s;
+            cursor: pointer;
         }
         #results div:hover {
             background-color: #f1f1f1;
         }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
     </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="admindashb.html">Home</a>
+        <a href="search.html">Search</a>
+        <a href="stock.html">Store & Requisition</a>
+        <a href="edit_profile.html">Edit Profile</a>
+    </div>
+
+    <!-- Top Bar with Icons -->
+    <div class="icon-bar">
+        <i class="fa-solid fa-bars"></i> <!-- Hamburger menu icon -->
+        <div class="dropdown">
+            <i class="fa-solid fa-filter"></i> <!-- Filter/Sort icon -->
+            <div class="dropdown-content">
+                <a href="#" onclick="selectSort('name')">Sort by Name</a>
+                <a href="#" onclick="selectSort('date')">Sort by Date</a>
+            </div>
+        </div>
+        <i class="fa-solid fa-magnifying-glass hidden" id="search-icon" onclick="searchData()"></i> <!-- Search icon -->
+        <i class="fa-solid fa-ellipsis-vertical"></i> <!-- Vertical dots icon -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h1>Brilliant Researchers</h1>
+        <div id="results"></div>
+        <div id="details"></div> <!-- Section to display additional details -->
+    </div>
+
     <script>
+        let selectedSort = "";
+
+        function selectSort(sortType) {
+            selectedSort = sortType;
+            const searchIcon = document.getElementById('search-icon');
+            searchIcon.classList.remove('hidden'); // Show the search icon
+        }
+
+        function searchData() {
+            if (!selectedSort) {
+                alert("Please select a sorting option first!");
+                return;
+            }
+            fetchData(selectedSort);
+        }
+
         function fetchData(sort) {
             fetch('search_intern.php?sort=' + sort)
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('results');
-                    container.innerHTML = '';
+                    container.innerHTML = ''; // Clear previous results
                     if (data.error) {
                         container.innerHTML = `<p>${data.error}</p>`;
                     } else {
                         data.forEach(item => {
                             const div = document.createElement('div');
-                            const link = document.createElement('a');
-                            link.href = '#';
-                            link.textContent = item[sort];
-                            link.onclick = function() {
+                            div.textContent = item[sort];
+                            div.onclick = function() {
                                 fetchDetails(sort, item[sort]);
                             };
-                            div.appendChild(link);
                             container.appendChild(div);
                         });
                     }
@@ -118,19 +182,42 @@
         }
 
         function fetchDetails(type, value) {
-            fetch('details_intern.php?type=' + type + '&value=' + value)
+            fetch('details_intern.php?type=' + type + '&value=' + encodeURIComponent(value))
                 .then(response => response.json())
                 .then(data => {
-                    const container = document.getElementById('results');
-                    container.innerHTML = '';
+                    const container = document.getElementById('details');
+                    container.innerHTML = ''; // Clear previous details
                     if (data.error) {
                         container.innerHTML = `<p>${data.error}</p>`;
                     } else {
-                        data.forEach(item => {
-                            const div = document.createElement('div');
-                            div.textContent = JSON.stringify(item);
-                            container.appendChild(div);
+                        const table = document.createElement('table');
+                        const thead = document.createElement('thead');
+                        const tbody = document.createElement('tbody');
+
+                        // Create table headers
+                        const headers = Object.keys(data[0]);
+                        const headerRow = document.createElement('tr');
+                        headers.forEach(header => {
+                            const th = document.createElement('th');
+                            th.textContent = header;
+                            headerRow.appendChild(th);
                         });
+                        thead.appendChild(headerRow);
+
+                        // Create table rows
+                        data.forEach(detail => {
+                            const row = document.createElement('tr');
+                            headers.forEach(header => {
+                                const td = document.createElement('td');
+                                td.textContent = detail[header];
+                                row.appendChild(td);
+                            });
+                            tbody.appendChild(row);
+                        });
+
+                        table.appendChild(thead);
+                        table.appendChild(tbody);
+                        container.appendChild(table);
                     }
                 })
                 .catch(error => {
@@ -138,24 +225,5 @@
                 });
         }
     </script>
-</head>
-<body>
-    <div class="sidebar">
-        <a href="admindashb.html">Home</a>
-        <a href="search.html">Search</Search></a>
-        <a href="stock.html">Store & Requisition</a>
-        <a href="edit_profile.html">Edit Profile</a>
-    </div>
-    <div class="content">
-        <h1>Brilliant Researchers</h1>
-        <div class="dropdown">
-            <button class="sort-btn">Sort Options</button>
-            <div class="dropdown-content">
-                <a href="#" onclick="fetchData('name')">Sort by Name</a>
-                <a href="#" onclick="fetchData('date')">Sort by Date</a>
-            </div>
-        </div>
-        <div id="results"></div>
-    </div>
 </body>
 </html>
