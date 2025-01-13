@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $timeArrived = $_POST['time_arrived'];
     $timeLeft = $_POST['time_left'];
     $transportFee = isset($_POST['transport_fee']) ? 1 : 0;
+    $left= isset($_POST['left']) ? 1 : 0;
     $transportAmount = $_POST['transport_amount'] ?? NULL;
     $tasksPerformed = $_POST['tasks_performed'];
     $supervisorName = $_POST['supervisor_name'];

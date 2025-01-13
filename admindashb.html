@@ -97,7 +97,7 @@
         <li><a href="edit_profile.html">Edit Profile</a></li>
       </ul>
     </nav>
-    <main class="content">
+    <main class="content"
       <h2>Admin Dashboard</h2>
       <table>
         <thead>
@@ -106,8 +106,9 @@
             <th>Date</th>
             <th>Time Arrived</th>
             <th>Time Left</th>
-            <th>Transport Fee</th>
+            <th>Transport Issued</th>
             <th>Transport Amount</th>
+            <th>Lunch Issued </th>
             <th>Tasks Performed</th>
             <th>File Upload</th>
             <th>Supervisor Name</th>
@@ -139,6 +140,7 @@
                         <td>${report.time_left}</td>
                         <td>${report.transport_fee ? 'Yes' : 'No'}</td>
                         <td>${report.transport_amount}</td>
+                        <td>${report.lunch? 'No': 'yes' }</td>
                         <td>${report.tasks_performed}</td>
                         <td><a href="${report.file_upload}">View</a></td>
                         <td>${report.supervisor_name}</td>
