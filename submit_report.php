@@ -12,12 +12,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = $_POST['name']; // Retrieve the name from the form
+    $firstName = $_POST['first_name']; // Retrieve the first name from the form
+    $lastName = $_POST['last_name']; // Retrieve the last name from the form
+    $name = $firstName . ' ' . $lastName; // Concatenate first name and last name
     $date = $_POST['date'];
     $timeArrived = $_POST['time_arrived'];
     $timeLeft = $_POST['time_left'];
     $transportFee = isset($_POST['transport_fee']) ? 1 : 0;
-    $left= isset($_POST['left']) ? 1 : 0;
     $transportAmount = $_POST['transport_amount'] ?? NULL;
     $tasksPerformed = $_POST['tasks_performed'];
     $supervisorName = $_POST['supervisor_name'];
@@ -44,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-
-    $conn->close();
 }
+
+$conn->close();
 ?>

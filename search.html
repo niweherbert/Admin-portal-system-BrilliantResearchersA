@@ -108,6 +108,82 @@
         tr:hover {
             background-color: #ddd;
         }
+
+        .sidebar {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #002147;
+    padding-top: 20px;
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-200px); /* Slide out the sidebar */
+}
+
+.icon-bar {
+    margin-left: 200px;
+    transition: margin-left 0.3s ease;
+}
+
+.icon-bar.expanded {
+    margin-left: 0; /* Adjust for hidden sidebar */
+}
+
+.content {
+    margin-left: 220px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.content.expanded {
+    margin-left: 20px; /* Adjust for hidden sidebar */
+}
+
+
+
+
+
+
+
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0; /* Align to the right edge of the container */
+    background-color: #f9f9f9;
+    min-width: 120px; /* Adjust width as needed */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 5px 0; /* Spacing inside the dropdown */
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+    text-align: left;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -121,7 +197,7 @@
 
     <!-- Top Bar with Icons -->
     <div class="icon-bar">
-        <i class="fa-solid fa-bars"></i> <!-- Hamburger menu icon -->
+        <i class="fa-solid fa-bars" onclick="toggleSidebar()"></i> <!-- Hamburger menu icon -->
         <div class="dropdown">
             <i class="fa-solid fa-filter"></i> <!-- Filter/Sort icon -->
             <div class="dropdown-content">
@@ -130,7 +206,14 @@
             </div>
         </div>
         <i class="fa-solid fa-magnifying-glass hidden" id="search-icon" onclick="searchData()"></i> <!-- Search icon -->
-        <i class="fa-solid fa-ellipsis-vertical"></i> <!-- Vertical dots icon -->
+       
+        <div class="dropdown">
+            <i class="fa-solid fa-ellipsis-vertical" onclick="toggleLogoutMenu()"></i> <!-- Vertical dots icon -->
+            <div class="dropdown-content hidden" id="logout-menu">
+                <a href="index.html.html">Logout</a>
+            </div>
+        </div>
+
     </div>
 
     <!-- Main Content -->
@@ -141,6 +224,51 @@
     </div>
 
     <script>
+
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const iconBar = document.querySelector('.icon-bar');
+    const content = document.querySelector('.content');
+
+    // Toggle the hidden class on the sidebar
+    sidebar.classList.toggle('hidden');
+
+    // Adjust the layout for the rest of the page
+    iconBar.classList.toggle('expanded');
+    content.classList.toggle('expanded');
+}
+
+
+
+
+
+
+
+function toggleVerticalMenu() {
+    const menu = document.querySelector('.vertical-menu-content');
+    menu.classList.toggle('show');
+}
+
+// Close the menu if clicked outside
+document.addEventListener('click', (event) => {
+    const menu = document.querySelector('.vertical-menu-content');
+    const icon = document.querySelector('.fa-ellipsis-vertical');
+    if (!menu.contains(event.target) && !icon.contains(event.target)) {
+        menu.classList.remove('show');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
         let selectedSort = "";
 
         function selectSort(sortType) {
@@ -224,6 +352,16 @@
                     console.error('Error fetching details:', error);
                 });
         }
+
+
+
+
+        function toggleLogoutMenu() {
+            const logoutMenu = document.getElementById('logout-menu');
+            logoutMenu.classList.toggle('hidden');
+        }
+
+
     </script>
 </body>
 </html>
