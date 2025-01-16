@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch data from the daily_reports table
-$sql = "SELECT date, time_arrived, time_left, transport_fee, transport_amount, tasks_performed, file_upload, supervisor_name, name FROM daily_reports";
+$sql = "SELECT id, date, time_arrived, time_left, transport_fee, transport_amount, tasks_performed, file_upload, supervisor_name, name FROM daily_reports";
 $result = $conn->query($sql);
 
 $data = [];

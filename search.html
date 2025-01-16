@@ -181,6 +181,89 @@
 
 
 
+.logout-icon {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .logout-icon img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+    .logout-icon span {
+      font-size: 0.9rem;
+    }
+
+
+
+
+
+
+
+    .feedback-container {
+            margin-top: 20px;
+        }
+
+        .feedback-container input, .feedback-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .feedback-container button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .feedback-container button:hover {
+            background-color: #0056b3;
+        }
+
+
+
+
+
+
+        .nested-dropdown {
+        position: relative;
+    }
+
+    .nested-dropdown-content {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .nested-dropdown:hover .nested-dropdown-content {
+        display: block;
+    }
+
+    .nested-dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .nested-dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+
+
 
 
 
@@ -203,15 +286,22 @@
             <div class="dropdown-content">
                 <a href="#" onclick="selectSort('name')">Sort by Name</a>
                 <a href="#" onclick="selectSort('date')">Sort by Date</a>
+                <div class="nested-dropdown">
+                    <a href="#">Sort by Role</a>
+                    <div class="nested-dropdown-content">
+                        <a href="#" onclick="fetchAllData('specialization')">All Specializations</a>
+                        <a href="#" onclick="fetchAllData('final_role')">All Final Roles</a>
+                    </div>
+                </div>
             </div>
         </div>
         <i class="fa-solid fa-magnifying-glass hidden" id="search-icon" onclick="searchData()"></i> <!-- Search icon -->
        
-        <div class="dropdown">
-            <i class="fa-solid fa-ellipsis-vertical" onclick="toggleLogoutMenu()"></i> <!-- Vertical dots icon -->
-            <div class="dropdown-content hidden" id="logout-menu">
-                <a href="index.html">Logout</a>
-            </div>
+        <div class="logout-icon" onclick="confirmLogout()">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout Icon">
+            <span>Logout</span>
+        </div>
+
         </div>
 
     </div>
@@ -224,57 +314,22 @@
     </div>
 
     <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const iconBar = document.querySelector('.icon-bar');
+            const content = document.querySelector('.content');
 
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    const iconBar = document.querySelector('.icon-bar');
-    const content = document.querySelector('.content');
-
-    // Toggle the hidden class on the sidebar
-    sidebar.classList.toggle('hidden');
-
-    // Adjust the layout for the rest of the page
-    iconBar.classList.toggle('expanded');
-    content.classList.toggle('expanded');
-}
-
-
-
-
-
-
-
-function toggleVerticalMenu() {
-    const menu = document.querySelector('.vertical-menu-content');
-    menu.classList.toggle('show');
-}
-
-// Close the menu if clicked outside
-document.addEventListener('click', (event) => {
-    const menu = document.querySelector('.vertical-menu-content');
-    const icon = document.querySelector('.fa-ellipsis-vertical');
-    if (!menu.contains(event.target) && !icon.contains(event.target)) {
-        menu.classList.remove('show');
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
+            sidebar.classList.toggle('hidden');
+            iconBar.classList.toggle('expanded');
+            content.classList.toggle('expanded');
+        }
 
         let selectedSort = "";
 
         function selectSort(sortType) {
             selectedSort = sortType;
             const searchIcon = document.getElementById('search-icon');
-            searchIcon.classList.remove('hidden'); // Show the search icon
+            searchIcon.classList.remove('hidden'); 
         }
 
         function searchData() {
@@ -290,7 +345,7 @@ document.addEventListener('click', (event) => {
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('results');
-                    container.innerHTML = ''; // Clear previous results
+                    container.innerHTML = ''; 
                     if (data.error) {
                         container.innerHTML = `<p>${data.error}</p>`;
                     } else {
@@ -314,7 +369,7 @@ document.addEventListener('click', (event) => {
                 .then(response => response.json())
                 .then(data => {
                     const container = document.getElementById('details');
-                    container.innerHTML = ''; // Clear previous details
+                    container.innerHTML = ''; 
                     if (data.error) {
                         container.innerHTML = `<p>${data.error}</p>`;
                     } else {
@@ -322,7 +377,6 @@ document.addEventListener('click', (event) => {
                         const thead = document.createElement('thead');
                         const tbody = document.createElement('tbody');
 
-                        // Create table headers
                         const headers = Object.keys(data[0]);
                         const headerRow = document.createElement('tr');
                         headers.forEach(header => {
@@ -332,7 +386,6 @@ document.addEventListener('click', (event) => {
                         });
                         thead.appendChild(headerRow);
 
-                        // Create table rows
                         data.forEach(detail => {
                             const row = document.createElement('tr');
                             headers.forEach(header => {
@@ -346,6 +399,9 @@ document.addEventListener('click', (event) => {
                         table.appendChild(thead);
                         table.appendChild(tbody);
                         container.appendChild(table);
+
+                        // Display feedback form
+                        displayFeedbackForm(value);
                     }
                 })
                 .catch(error => {
@@ -353,15 +409,119 @@ document.addEventListener('click', (event) => {
                 });
         }
 
+        function displayFeedbackForm(name) {
+            const container = document.getElementById('details');
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.classList.add('feedback-container');
 
+            const feedbackTitle = document.createElement('h3');
+            feedbackTitle.textContent = `Leave feedback for ${name}`;
+            feedbackContainer.appendChild(feedbackTitle);
 
+            const textarea = document.createElement('textarea');
+            textarea.placeholder = 'Write your feedback here...';
+            feedbackContainer.appendChild(textarea);
 
-        function toggleLogoutMenu() {
-            const logoutMenu = document.getElementById('logout-menu');
-            logoutMenu.classList.toggle('hidden');
+            const button = document.createElement('button');
+            button.textContent = 'Submit Feedback';
+            button.onclick = function() {
+                submitFeedback(name, textarea.value);
+            };
+            feedbackContainer.appendChild(button);
+
+            container.appendChild(feedbackContainer);
+        }
+
+        function submitFeedback(name, feedback) {
+            if (feedback.trim() === '') {
+                alert('Please write some feedback before submitting!');
+                return;
+            }
+
+            fetch('submit_feedback.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `name=${encodeURIComponent(name)}&feedback=${encodeURIComponent(feedback)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Feedback submitted successfully!');
+                } else {
+                    alert('There was an error submitting your feedback.');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting feedback:', error);
+            });
+
         }
 
 
+
+
+
+
+
+
+
+
+        function fetchAllData(column) {
+        fetch(`fetch_all_data.php?column=${column}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('results');
+                container.innerHTML = ''; 
+                if (data.error) {
+                    container.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    const table = document.createElement('table');
+                    const thead = document.createElement('thead');
+                    const tbody = document.createElement('tbody');
+
+                    // Create header
+                    const headerRow = document.createElement('tr');
+                    const th = document.createElement('th');
+                    th.textContent = column.charAt(0).toUpperCase() + column.slice(1);
+                    headerRow.appendChild(th);
+                    thead.appendChild(headerRow);
+
+                    // Create rows
+                    data.forEach(item => {
+                        const row = document.createElement('tr');
+                        const td = document.createElement('td');
+                        td.textContent = item[column];
+                        row.appendChild(td);
+                        tbody.appendChild(row);
+                    });
+
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+                    container.appendChild(table);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
     </script>
+</body>
+</html>
 </body>
 </html>

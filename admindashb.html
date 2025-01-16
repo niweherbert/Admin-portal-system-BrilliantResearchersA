@@ -102,6 +102,7 @@
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Date</th>
             <th>Time Arrived</th>
@@ -133,7 +134,11 @@
                 data.forEach((report, index) => {
                     const row = document.createElement('tr');
 
+                    // Format the ID with leading zeros
+                    const formattedId = String(report.id).padStart(3, '0');
+
                     row.innerHTML = `
+                        <td>${formattedId}</td>
                         <td>${report.name}</td>
                         <td>${report.date}</td>
                         <td>${report.time_arrived}</td>
