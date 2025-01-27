@@ -1,5 +1,5 @@
 <?php
-include 'db_config.php';
+include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = $_POST['token'];

@@ -308,171 +308,67 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h1>Brilliant Researchers</h1>
+        <h1>Brilliant Researchers Africa</h1>
         <div id="results"></div>
         <div id="details"></div> <!-- Section to display additional details -->
     </div>
 
     <script>
         function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const iconBar = document.querySelector('.icon-bar');
-            const content = document.querySelector('.content');
+        const sidebar = document.querySelector('.sidebar');
+        const iconBar = document.querySelector('.icon-bar');
+        const content = document.querySelector('.content');
 
-            sidebar.classList.toggle('hidden');
-            iconBar.classList.toggle('expanded');
-            content.classList.toggle('expanded');
+        sidebar.classList.toggle('hidden');
+        iconBar.classList.toggle('expanded');
+        content.classList.toggle('expanded');
+    }
+
+    let selectedSort = "";
+
+    function selectSort(sortType) {
+        selectedSort = sortType;
+        const searchIcon = document.getElementById('search-icon');
+        searchIcon.classList.remove('hidden'); 
+    }
+
+    function searchData() {
+        if (!selectedSort) {
+            alert("Please select a sorting option first!");
+            return;
         }
+        fetchData(selectedSort);
+    }
 
-        let selectedSort = "";
-
-        function selectSort(sortType) {
-            selectedSort = sortType;
-            const searchIcon = document.getElementById('search-icon');
-            searchIcon.classList.remove('hidden'); 
-        }
-
-        function searchData() {
-            if (!selectedSort) {
-                alert("Please select a sorting option first!");
-                return;
-            }
-            fetchData(selectedSort);
-        }
-
-        function fetchData(sort) {
-            fetch('search_intern.php?sort=' + sort)
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('results');
-                    container.innerHTML = ''; 
-                    if (data.error) {
-                        container.innerHTML = `<p>${data.error}</p>`;
-                    } else {
-                        data.forEach(item => {
-                            const div = document.createElement('div');
-                            div.textContent = item[sort];
-                            div.onclick = function() {
-                                fetchDetails(sort, item[sort]);
-                            };
-                            container.appendChild(div);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-
-        function fetchDetails(type, value) {
-            fetch('details_intern.php?type=' + type + '&value=' + encodeURIComponent(value))
-                .then(response => response.json())
-                .then(data => {
-                    const container = document.getElementById('details');
-                    container.innerHTML = ''; 
-                    if (data.error) {
-                        container.innerHTML = `<p>${data.error}</p>`;
-                    } else {
-                        const table = document.createElement('table');
-                        const thead = document.createElement('thead');
-                        const tbody = document.createElement('tbody');
-
-                        const headers = Object.keys(data[0]);
-                        const headerRow = document.createElement('tr');
-                        headers.forEach(header => {
-                            const th = document.createElement('th');
-                            th.textContent = header;
-                            headerRow.appendChild(th);
-                        });
-                        thead.appendChild(headerRow);
-
-                        data.forEach(detail => {
-                            const row = document.createElement('tr');
-                            headers.forEach(header => {
-                                const td = document.createElement('td');
-                                td.textContent = detail[header];
-                                row.appendChild(td);
-                            });
-                            tbody.appendChild(row);
-                        });
-
-                        table.appendChild(thead);
-                        table.appendChild(tbody);
-                        container.appendChild(table);
-
-                        // Display feedback form
-                        displayFeedbackForm(value);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching details:', error);
-                });
-        }
-
-        function displayFeedbackForm(name) {
-            const container = document.getElementById('details');
-            const feedbackContainer = document.createElement('div');
-            feedbackContainer.classList.add('feedback-container');
-
-            const feedbackTitle = document.createElement('h3');
-            feedbackTitle.textContent = `Leave feedback for ${name}`;
-            feedbackContainer.appendChild(feedbackTitle);
-
-            const textarea = document.createElement('textarea');
-            textarea.placeholder = 'Write your feedback here...';
-            feedbackContainer.appendChild(textarea);
-
-            const button = document.createElement('button');
-            button.textContent = 'Submit Feedback';
-            button.onclick = function() {
-                submitFeedback(name, textarea.value);
-            };
-            feedbackContainer.appendChild(button);
-
-            container.appendChild(feedbackContainer);
-        }
-
-        function submitFeedback(name, feedback) {
-            if (feedback.trim() === '') {
-                alert('Please write some feedback before submitting!');
-                return;
-            }
-
-            fetch('submit_feedback.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `name=${encodeURIComponent(name)}&feedback=${encodeURIComponent(feedback)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Feedback submitted successfully!');
-                } else {
-                    alert('There was an error submitting your feedback.');
-                }
-            })
-            .catch(error => {
-                console.error('Error submitting feedback:', error);
-            });
-
-        }
-
-
-
-
-
-
-
-
-
-
-        function fetchAllData(column) {
-        fetch(`fetch_all_data.php?column=${column}`)
+    function fetchData(sort) {
+        fetch('search_intern.php?sort=' + sort)
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('results');
+                container.innerHTML = ''; 
+                if (data.error) {
+                    container.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item[sort];
+                        div.onclick = function() {
+                            fetchDetails(sort, item[sort]);
+                        };
+                        container.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+    function fetchDetails(type, value) {
+        fetch('details_intern.php?type=' + type + '&value=' + encodeURIComponent(value))
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('details');
                 container.innerHTML = ''; 
                 if (data.error) {
                     container.innerHTML = `<p>${data.error}</p>`;
@@ -481,25 +377,104 @@
                     const thead = document.createElement('thead');
                     const tbody = document.createElement('tbody');
 
-                    // Create header
+                    const headers = Object.keys(data[0]);
                     const headerRow = document.createElement('tr');
-                    const th = document.createElement('th');
-                    th.textContent = column.charAt(0).toUpperCase() + column.slice(1);
-                    headerRow.appendChild(th);
+                    headers.forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header;
+                        headerRow.appendChild(th);
+                    });
                     thead.appendChild(headerRow);
 
-                    // Create rows
-                    data.forEach(item => {
+                    data.forEach(detail => {
                         const row = document.createElement('tr');
-                        const td = document.createElement('td');
-                        td.textContent = item[column];
-                        row.appendChild(td);
+                        headers.forEach(header => {
+                            const td = document.createElement('td');
+                            td.textContent = detail[header];
+                            row.appendChild(td);
+                        });
                         tbody.appendChild(row);
                     });
 
                     table.appendChild(thead);
                     table.appendChild(tbody);
                     container.appendChild(table);
+
+                    // Display feedback form
+                    displayFeedbackForm(value);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching details:', error);
+            });
+    }
+
+    function displayFeedbackForm(name) {
+        const container = document.getElementById('details');
+        const feedbackContainer = document.createElement('div');
+        feedbackContainer.classList.add('feedback-container');
+
+        const feedbackTitle = document.createElement('h3');
+        feedbackTitle.textContent = `Leave feedback for ${name}`;
+        feedbackContainer.appendChild(feedbackTitle);
+
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = 'Write your feedback here...';
+        feedbackContainer.appendChild(textarea);
+
+        const button = document.createElement('button');
+        button.textContent = 'Submit Feedback';
+        button.onclick = function() {
+            submitFeedback(name, textarea.value);
+        };
+        feedbackContainer.appendChild(button);
+
+        container.appendChild(feedbackContainer);
+    }
+
+    function submitFeedback(name, feedback) {
+        if (feedback.trim() === '') {
+            alert('Please write some feedback before submitting!');
+            return;
+        }
+
+        fetch('submit_feedback.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `name=${encodeURIComponent(name)}&feedback=${encodeURIComponent(feedback)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.success);
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting feedback:', error);
+        });
+    }
+
+    function fetchAllData(column) {
+        fetch(`fetch_all_data.php?column=${column}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('results');
+                container.innerHTML = ''; 
+                if (data.error) {
+                    container.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item[column];
+                        div.onclick = function() {
+                            fetchNames(column, item[column]);
+                        };
+                        container.appendChild(div);
+                    });
                 }
             })
             .catch(error => {
@@ -507,17 +482,29 @@
             });
     }
 
-    
-
-
-
-
-
-
-
-
-
-
+    function fetchNames(column, value) {
+        fetch(`fetch_names_by_role.php?column=${column}&value=${encodeURIComponent(value)}`)
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('results');
+                container.innerHTML = ''; 
+                if (data.error) {
+                    container.innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    data.forEach(item => {
+                        const div = document.createElement('div');
+                        div.textContent = item.name;
+                        div.onclick = function() {
+                            fetchDetails('name', item.name);
+                        };
+                        container.appendChild(div);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching names:', error);
+            });
+    }
 
 
     </script>

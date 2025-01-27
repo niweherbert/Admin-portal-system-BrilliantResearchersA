@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <button id="sidebarToggle">☰</button>
   <title>Dashboard | Brilliant Researchers Africa</title>
   <style>
     body {
@@ -91,6 +92,78 @@
     form button:hover {
       background-color: #002147;
     }
+
+
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        padding-top: 10px;
+      }
+
+      .content {
+        padding: 10px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      header h1 {
+        font-size: 1rem;
+      }
+
+      .logout-icon span {
+        display: none;
+      }
+
+      .sidebar ul li a {
+        font-size: 0.9rem;
+      }
+
+      form input,
+      form textarea,
+      form button {
+        font-size: 14px;
+      }
+    }
+
+
+
+/* styles to handle to toggle */
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100%;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  #sidebarToggle {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #sidebarToggle {
+    display: none;
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -143,6 +216,11 @@
     </main>
   </div>
   <script>
+
+document.getElementById('sidebarToggle').addEventListener('click', function() {
+    document.querySelector('.sidebar').classList.toggle('active');
+  });
+
     const transportFeeCheckbox = document.getElementById('transport-fee');
     const transportAmountInput = document.getElementById('transport-amount');
     transportFeeCheckbox.addEventListener('change', () => {

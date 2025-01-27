@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['username'])) {
+    header('Location: index.html');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,31 +109,34 @@
       <ul>
         <li><a href="dashboard.html">Home</a></li>
         <li><a href="feedback.html" class="active">Feedback</a></li>
-
-        <li><a href="neededmat.html">Needed Materials</a>
-
+        <li><a href="neededmat.html">Needed Materials</a></li>
         <li><a href="edit-profile.html">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">
       <h2>Feedback and Info Section</h2>
-      <textarea placeholder="Feedback will appear here..." readonly></textarea>
-      <button onclick="openFeedback()">Open</button>
-      <button onclick="downloadFeedback()">Download</button>
+      <textarea id="displayFeedback" placeholder="Feedback will appear here..." readonly></textarea>
       <p>Overall Percentage: XXXX</p>
     </main>
   </div>
   <script>
-    // Internal JS
-    function openFeedback() {
-      alert('Feedback opened.');
-    }
-    function downloadFeedback() {
-      alert('Feedback downloaded.');
-    }
-    function logout() {
-      alert('You have been logged out.');
-      window.location.href = 'login.html';
+    document.addEventListener('DOMContentLoaded', function() {
+      loadFeedback();
+    });
+
+    function loadFeedback() {
+      fetch('get_user_feedback.php')
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          document.getElementById('displayFeedback').value = data.map(item => item.feedback).join('\n');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching feedback:', error);
+      });
     }
   </script>
 </body>

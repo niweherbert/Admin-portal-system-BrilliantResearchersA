@@ -86,9 +86,48 @@
     }
 
 
+ /* Responsive styles */
+ @media screen and (max-width: 768px) {
+      .container {
+        width: 90%;
+        max-width: 350px;
+      }
 
+      .form-group input, .form-group select {
+        font-size: 16px; /* Prevents zoom on mobile devices */
+      }
+    }
 
-    
+    @media screen and (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      .container h1 {
+        font-size: 18px;
+      }
+
+      .form-group {
+        margin-bottom: 10px;
+      }
+
+      .form-group label {
+        font-size: 12px;
+      }
+
+      .form-group input, .form-group select {
+        padding: 8px;
+      }
+
+      .form-group button {
+        font-size: 14px;
+      }
+
+      .links a {
+        font-size: 11px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -118,7 +157,7 @@
           </select>
         </div>
         <div class="links">
-          <a href="#" onclick="showResetPasswordForm()">Forgot password?</a>
+          <a href="forgot_password.php">Forgot password?</a>
         </div>
         <div class="form-group">
           <button type="submit">Login</button>
