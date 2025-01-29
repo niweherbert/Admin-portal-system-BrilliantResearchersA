@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
         <div class="links">
-            <a href="index.html">Back to Login</a>
+            <a href="index.php">Back to Login</a>
         </div>
     </div>
 </body>

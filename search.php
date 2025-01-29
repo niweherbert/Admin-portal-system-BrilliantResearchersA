@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -272,10 +280,10 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="admindashb.html">Home</a>
-        <a href="search.html">Search</a>
-        <a href="stock.html">Store & Requisition</a>
-        <a href="edit_profile.html">Edit Profile</a>
+        <a href="admindashb.php">Home</a>
+        <a href="search.php">Search</a>
+        <a href="stock.php">Store & Requisition</a>
+        <a href="edit_profile.php">Edit Profile</a>
     </div>
 
     <!-- Top Bar with Icons -->

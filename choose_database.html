@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Database | Brilliant Researchers Africa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #003366;
+            margin-bottom: 1rem;
+        }
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #002147;
+        }
+     * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom right, #87CEEB, #1E90FF);
+    }
+  
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Database Selection</h1>
+        <select id="databaseSelect">
+            <option value="">Choose a database</option>
+            <option value="sustainable_homes">Sustainable Homes Designs Rwanda Ltd</option>
+           
+            <option value="brilliant_researchers">Brilliant Researchers Africa</option> 
+            <option value="HR_Dashboard">HR Dashboard</option>
+        </select>
+        <button onclick="selectDatabase()">Continue</button>
+    </div>
+
+    <script>
+        function selectDatabase() {
+            const selectedDatabase = document.getElementById('databaseSelect').value;
+            if (selectedDatabase === 'brilliant_researchers') {
+                window.location.href = 'index.php';
+            } else if (selectedDatabase === 'sustainable_homes') {
+                window.location.href = 'SHDR.php';
+            } else {
+                alert('Please select a database');
+            }
+        }
+    </script>
+</body>
+</html>

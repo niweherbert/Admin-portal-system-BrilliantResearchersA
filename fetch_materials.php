@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "brilliant_researchers";
+$dbname = "needed_materials_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -12,7 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM needed_materials";
+$sql = "SELECT * FROM materials";
 $result = $conn->query($sql);
 
 $materials = [];

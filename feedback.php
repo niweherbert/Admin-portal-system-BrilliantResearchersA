@@ -1,9 +1,15 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-    header('Location: index.html');
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // If not logged in, redirect to the login page
+    header("Location: login.php");
     exit();
 }
+
+// Get the user's username from the session
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,36 +113,39 @@ if (!isset($_SESSION['username'])) {
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="dashboard.html">Home</a></li>
-        <li><a href="feedback.html" class="active">Feedback</a></li>
-        <li><a href="neededmat.html">Needed Materials</a></li>
-        <li><a href="edit-profile.html">Edit Profile</a></li>
+        <li><a href="dashboard.php">Home</a></li>
+        <li><a href="feedback.php" class="active">Feedback</a></li>
+        <li><a href="neededmat.php">Needed Materials</a></li>
+        <li><a href="edit-profile.php">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">
       <h2>Feedback and Info Section</h2>
       <textarea id="displayFeedback" placeholder="Feedback will appear here..." readonly></textarea>
-      <p>Overall Percentage: XXXX</p>
+      
     </main>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      loadFeedback();
+     document.addEventListener('DOMContentLoaded', function() {
+        loadFeedback();
     });
 
     function loadFeedback() {
-      fetch('get_user_feedback.php')
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          document.getElementById('displayFeedback').value = data.map(item => item.feedback).join('\n');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching feedback:', error);
-      });
+        fetch('get_user_feedback.php', {
+            method: 'GET',
+            credentials: 'same-origin' // This line ensures that cookies (including session ID) are sent with the request
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('displayFeedback').value = data.map(item => item.feedback).join('\n');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching feedback:', error);
+        });
     }
   </script>
 </body>

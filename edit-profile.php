@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,10 +124,10 @@
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="dashboard.html">Home</a></li>
-        <li><a href="feedback.html">Feedback</a></li>
-        <li><a href="neededmat.html">Needed Materials</a></li>
-        <li><a href="edit-profile.html" class="active">Edit Profile</a></li>
+        <li><a href="dashboard.php">Home</a></li>
+        <li><a href="feedback.php">Feedback</a></li>
+        <li><a href="neededmat.php">Needed Materials</a></li>
+        <li><a href="edit-profile.php" class="active">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">

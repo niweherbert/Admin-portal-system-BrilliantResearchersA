@@ -1,3 +1,12 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,10 +100,10 @@
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="admindashb.html" class="active">Home</a></li>
-        <li><a href="stock.html">Store & Requisition</a></li>
-        <li><a href="search.html">Search</a></li>
-        <li><a href="edit_profile.html">Edit Profile</a></li>
+        <li><a href="admindashb.php" class="active">Home</a></li>
+        <li><a href="stock.php">Store & Requisition</a></li>
+        <li><a href="search.php">Search</a></li>
+        <li><a href="edit_profile.php">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content"></main>
@@ -159,7 +168,7 @@
     function confirmLogout() {
       const confirmation = confirm("Are you sure you want to log out?");
       if (confirmation) {
-        window.location.href = "index.html";
+        window.location.href = "index.php";
       }
     }
   </script>

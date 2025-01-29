@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(to bottom right, #87CEEB, #1E90FF);
+      background: linear-gradient(to bottom right, #87ebad, #1eff35);
     }
 
     .container {
@@ -58,7 +62,7 @@
     .form-group button {
       width: 100%;
       padding: 10px;
-      background: #1E90FF;
+      background: #1eff35;
       color: #fff;
       border: none;
       border-radius: 4px;
@@ -68,7 +72,7 @@
     }
 
     .form-group button:hover {
-      background: #104E8B;
+      background: #87ebad;
     }
 
     .links {
@@ -76,7 +80,7 @@
     }
 
     .links a {
-      color: #1E90FF;
+      color: #02a942;
       text-decoration: none;
       font-size: 12px;
     }
@@ -128,12 +132,30 @@
       }
     }
 
+
+
+  
+
+
+  .logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .logo {
+    max-width: 100%;
+    height: auto;
+    max-height: 100px; /* Adjust this value as needed */
+  }
+
+
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to Brilliant Researchers Africa</h1>
-
+    <div class="logo-container">
+        <img src="SHDR.png.png" alt="SHDR Logo" class="logo">
+      </div>
     <!-- Login Form -->
     <div id="loginForm">
       <h2>LOGIN</h2>
@@ -151,10 +173,14 @@
           <select id="loginRole" name="user_role" required>
             <option value="">Select Role</option>
             <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-            <option value="Intern">Intern</option>
-            <option value="Trainer">Trainer</option>
-          </select>
+            <option value="Employee">Architectural Design</option>
+            <option value="Employee">Project manager</option>
+            <option value="Employee">Structure engineer</option>
+            <option value="Employee">Quantity Survey</option>
+            <option value="Employee">Electrical Engineers</option>
+            <option value="Employee">Mechanical Engineer</option>
+            <option value="Employee">Supervisor</option>
+            </select>
         </div>
         <div class="links">
           <a href="forgot_password.php">Forgot password?</a>
@@ -199,45 +225,21 @@
           <label for="signupRole">User Role</label>
           <select id="signupRole" name="user_role" onchange="showSubRoles()" required>
             <option value="">Select Role</option>
+
             <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-            <option value="Intern">Intern</option>
-            <option value="Trainer">Trainer</option>
+            <option value="Employee">Architectural Design</option>
+            <option value="Employee">Project manager</option>
+            <option value="Employee">Structure engineer</option>
+            <option value="Employee">Quantity Survey</option>
+            <option value="Employee">Electrical Engineers</option>
+            <option value="Employee">Mechanical Engineer</option>
+            <option value="Employee">Supervisor</option>
+          
           </select>
-        </div>
-        <div class="form-group" id="subRoleGroup" style="display: none;">
-          <label for="subRole">Specialization</label>
-          <select id="subRole" name="specialization" onchange="showFinalRoles()">
-            <option value="">Select Specialization</option>
-            <option value="Physician">Physicist</option>
-            <!-- Add other specializations as needed -->
-            <option value="Chemist">Chemist</option>
-            <option value="IT">IT</option>
-            <option value="Mechanical">Mechanical</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Architecture">Architecture</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group" id="finalRoleGroup" style="display: none;">
-          <label for="finalRole">Role</label>
-          <select id="finalRole" name="role">
-            <option value="">Select Final Role</option>
-            <option value="CEO">CEO</option>
-            <option value="Manager">Manager</option>
-            <option value="Researcher">Researcher</option>
-            <option value="Trainer">Trainer</option>
-            <option value="Engineer">Engineer</option>
-            <option value="Technician">Technician</option>
-            <option value="Designer">Designer</option>
-            <option value="Developer">Developer</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group" id="finalRoleGroup" style="display: none;">
-          <label for="finalRole">Final Role</label>
-          <input type="text" id="finalRole" name="final_role" placeholder="Enter your final role">
-        </div>
+       
+           
+
+
         <div class="form-group">
           <button type="submit">Sign Up</button>
         </div>
