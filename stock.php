@@ -111,13 +111,29 @@ if (!isset($_SESSION['user_id'])) {
     form button:hover {
       background-color: #002147;
     }
+
+
+
+    .logo-container {
+    display: flex;
+    align-items: center;
+  }
+  .logo {
+    height: 50px;
+    margin-right: 10px;
+  }
+
+
   </style>
 </head>
 <body>
   <header>
-    <h1>Brilliant Researchers Africa</h1>
+  <div class="logo-container">
+      <img src="BRA.png" alt="Company Logo" class="logo">
+     
+    <h1>Brilliant Researchers Africa</h1> </div>
     <div class="logout-icon" onclick="confirmLogout()">
-      <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout Icon">
+    <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout Icon">
       <span>Logout</span>
     </div>
   </header>
@@ -131,7 +147,23 @@ if (!isset($_SESSION['user_id'])) {
     </nav>
     <main class="content">
       <h2>Needed Materials</h2>
-      <table id="needed-table">
+      
+      <h3>Chemicals</h3>
+      <table id="chemical-needed-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic rows will be added here -->
+        </tbody>
+      </table>
+
+      <h3>Equipment</h3>
+      <table id="equipment-needed-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -156,8 +188,8 @@ if (!isset($_SESSION['user_id'])) {
         </form>
       </div>
 
-      <h2>Available Stock</h2>
-      <table id="stock-table">
+      <h2>Available Stock - Chemicals</h2>
+      <table id="chemical-stock-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -170,6 +202,38 @@ if (!isset($_SESSION['user_id'])) {
         </tbody>
       </table>
 
+      <h2>Available Stock - Equipment</h2>
+      <table id="equipment-stock-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic rows will be added here -->
+        </tbody>
+      </table>
+
+      <div id="edit-form" style="display: none;">
+        <h3>Edit Material</h3>
+        <form>
+          <label for="edit-name">Name:</label>
+          <input type="text" id="edit-name" name="name" required>
+          <label for="edit-quantity">Quantity:</label>
+          <input type="text" id="edit-quantity" name="quantity" required>
+          <input type="hidden" id="edit-id">
+          <button type="button" onclick="saveEdit()">Save</button>
+        </form>
+      </div>
+
+     
+
+
+
+
+
       <div id="stock-form">
         <h3>Add New Stock</h3>
         <form>
@@ -177,212 +241,115 @@ if (!isset($_SESSION['user_id'])) {
           <input type="text" id="stock-name" name="name" required>
           <label for="stock-quantity">Quantity:</label>
           <input type="text" id="stock-quantity" name="quantity" required>
+          <label for="stock-type">Type:</label>
+          <select id="stock-type" name="type" required>
+            <option value="Chemical">Chemicals</option>
+            <option value="Equipment">Equipment</option>
+          </select>
           <button type="button" onclick="addStock()">Add</button>
         </form>
       </div>
 
-      <div id="edit-stock-form" style="display: none;">
-        <h3>Edit Stock</h3>
-        <form>
-          <label for="edit-stock-name">Name:</label>
-          <input type="text" id="edit-stock-name" name="name" required>
-          <label for="edit-stock-quantity">Quantity:</label>
-          <input type="text" id="edit-stock-quantity" name="quantity" required>
-          <input type="hidden" id="edit-stock-id">
-          <button type="button" onclick="saveStockEdit()">Save</button>
-        </form>
-      </div>
-
       <script>
-        async function fetchData() {
-          try {
-            const neededResponse = await fetch('fetch_needed_materials.php');
-            if (!neededResponse.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const needed = await neededResponse.json();
+        let stock = JSON.parse(localStorage.getItem('stock')) || [];
 
-            const neededTable = document.getElementById('needed-table').querySelector('tbody');
-            neededTable.innerHTML = needed.map(item => `
-              <tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>
-                  <button onclick="editItem(${item.id}, '${item.name}', '${item.quantity}')">Edit</button>
-                  <button onclick="deleteItem(${item.id})">Remove</button>
-                </td>
-              </tr>
-            `).join('');
+        function addStock() {
+          const stockName = document.getElementById('stock-name').value;
+          const stockQuantity = document.getElementById('stock-quantity').value;
+          const stockType = document.getElementById('stock-type').value;
 
-            const stockResponse = await fetch('fetch_stock.php');
-            if (!stockResponse.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const stock = await stockResponse.json();
+          if (stockName && stockQuantity && stockType) {
+            const newStock = { name: stockName, quantity: stockQuantity, type: stockType };
 
-            const stockTable = document.getElementById('stock-table').querySelector('tbody');
-            stockTable.innerHTML = stock.map(item => `
-              <tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>
-                  <button onclick="editStock(${item.id}, '${item.name}', '${item.quantity}')">Edit</button>
-                  <button onclick="deleteStock(${item.id})">Remove</button>
-                </td>
-              </tr>
-            `).join('');
-          } catch (error) {
-            console.error('Fetch error:', error);
-          }
-        }
-
-        async function deleteItem(id) {
-          try {
-            const formData = new FormData();
-            formData.append('id', id);
-
-            const response = await fetch('delete_needed_material.php', {
+            // Send data to the server
+            fetch('save_stock.php', {
               method: 'POST',
-              body: formData,
-            });
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(newStock)
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Add the new stock to the table
+                stock.push(newStock);
+                localStorage.setItem('stock', JSON.stringify(stock));
+                renderStockTable();
 
-            const result = await response.json();
-            if (result.success) {
-              fetchData();
-            } else {
-              alert(result.message);
+                // Clear the input fields
+                document.getElementById('stock-name').value = '';
+                document.getElementById('stock-quantity').value = '';
+                document.getElementById('stock-type').value = 'Chemical'; // Reset to default
+              } else {
+                alert('Failed to save stock');
+              }
+            })
+            .catch(error => console.error('Error:', error));
+          }
+        }
+
+        function renderStockTable() {
+          const chemicalStockTableBody = document.getElementById('chemical-stock-table').querySelector('tbody');
+          const equipmentStockTableBody = document.getElementById('equipment-stock-table').querySelector('tbody');
+          chemicalStockTableBody.innerHTML = '';
+          equipmentStockTableBody.innerHTML = '';
+
+          stock.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${item.name}</td>
+              <td>${item.quantity}</td>
+              <td class="action-buttons">
+                <button class="edit-btn" onclick="editStock(${index})">Edit</button>
+                <button class="remove-btn" onclick="removeStock(${index})">Remove</button>
+              </td>
+            `;
+            if (item.type === 'Chemical') {
+              chemicalStockTableBody.appendChild(row);
+            } else if (item.type === 'Equipment') {
+              equipmentStockTableBody.appendChild(row);
             }
-          } catch (error) {
-            console.error('Delete error:', error);
-          }
+          });
         }
 
-        function editItem(id, name, quantity) {
-          document.getElementById('edit-id').value = id;
-          document.getElementById('edit-name').value = name;
-          document.getElementById('edit-quantity').value = quantity;
-          document.getElementById('edit-form').style.display = 'block';
-        }
+        document.addEventListener('DOMContentLoaded', renderStockTable);
 
-        async function saveEdit() {
-          const id = document.getElementById('edit-id').value;
-          const name = document.getElementById('edit-name').value;
-          const quantity = document.getElementById('edit-quantity').value;
 
-          try {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('name', name);
-            formData.append('quantity', quantity);
 
-            const response = await fetch('update_needed_material.php', {
-              method: 'POST',
-              body: formData,
-            });
 
-            const result = await response.json();
-            if (result.success) {
-              fetchData();
-              document.getElementById('edit-form').style.display = 'none';
-            } else {
-              alert(result.message);
-            }
-          } catch (error) {
-            console.error('Update error:', error);
-          }
-        }
+        async function fetchNeededMaterials() {
+  try {
+    const response = await fetch('fetch_needed_materials.php');
+    const materials = await response.json();
 
-        async function addStock() {
-          const name = document.getElementById('stock-name').value;
-          const quantity = document.getElementById('stock-quantity').value;
+    const chemicalTableBody = document.getElementById('chemical-needed-table').querySelector('tbody');
+    const equipmentTableBody = document.getElementById('equipment-needed-table').querySelector('tbody');
+    chemicalTableBody.innerHTML = '';
+    equipmentTableBody.innerHTML = '';
 
-          try {
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('quantity', quantity);
+    materials.forEach(material => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${material.name}</td>
+        <td>${material.quantity}</td>
+        <td>
+          <button onclick="editItem(${material.id}, '${material.name}', '${material.quantity}')">Edit</button>
+          <button onclick="deleteItem(${material.id})">Remove</button>
+        </td>
+      `;
+      if (material.type === 'Chemical') {
+        chemicalTableBody.appendChild(row);
+      } else if (material.type === 'Equipment') {
+        equipmentTableBody.appendChild(row);
+      }
+    });
+  } catch (error) {
+    console.error('Fetch error:', error);
+  }
+}
 
-            const response = await fetch('add_stock.php', {
-              method: 'POST',
-              body: formData,
-            });
-
-            const result = await response.json();
-            if (result.success) {
-              fetchData();
-              document.getElementById('stock-name').value = '';
-              document.getElementById('stock-quantity').value = '';
-            } else {
-              alert(result.message);
-            }
-          } catch (error) {
-            console.error('Add stock error:', error);
-          }
-        }
-
-        async function deleteStock(id) {
-          try {
-            const formData = new FormData();
-            formData.append('id', id);
-
-            const response = await fetch('delete_stock.php', {
-              method: 'POST',
-              body: formData,
-            });
-
-            const result = await response.json();
-            if (result.success) {
-              fetchData();
-            } else {
-              alert(result.message);
-            }
-          } catch (error) {
-            console.error('Delete stock error:', error);
-          }
-        }
-
-        function editStock(id, name, quantity) {
-          document.getElementById('edit-stock-id').value = id;
-          document.getElementById('edit-stock-name').value = name;
-          document.getElementById('edit-stock-quantity').value = quantity;
-          document.getElementById('edit-stock-form').style.display = 'block';
-        }
-
-        async function saveStockEdit() {
-          const id = document.getElementById('edit-stock-id').value;
-          const name = document.getElementById('edit-stock-name').value;
-          const quantity = document.getElementById('edit-stock-quantity').value;
-
-          try {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('name', name);
-            formData.append('quantity', quantity);
-
-            const response = await fetch('update_stock.php', {
-              method: 'POST',
-              body: formData,
-            });
-
-            const result = await response.json();
-            if (result.success) {
-              fetchData();
-              document.getElementById('edit-stock-form').style.display = 'none';
-            } else {
-              alert(result.message);
-            }
-          } catch (error) {
-            console.error('Update stock error:', error);
-          }
-        }
-
-        function confirmLogout() {
-          const confirmation = confirm("Are you sure you want to log out?");
-          if (confirmation) {
-            window.location.href = "index.php";
-          }
-        }
-
-        fetchData();
+document.addEventListener('DOMContentLoaded', fetchNeededMaterials);
       </script>
     </main>
   </div>

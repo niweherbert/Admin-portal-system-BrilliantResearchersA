@@ -194,9 +194,23 @@ session_start();
       <h2>CREATE ACCOUNT</h2>
       <form action="register.php" method="POST">
         <div class="form-group">
-          <label for="signupName">Name</label>
-          <input type="text" id="signupName" name="name" placeholder="Enter your name" required>
+        <label for="signupFirstName">First Name</label>
+          <input type="text" id="signupFirstName" name="first_name" placeholder="Enter your first name" required>
         </div>
+        <div class="form-group">
+          <label for="signupLastName">Last Name</label>
+          <input type="text" id="signupLastName" name="last_name" placeholder="Enter your last name" required>
+        </div>
+
+
+        <div class="form-group">
+          <label for="signupOtherName">Other Name</label>
+          <input type="text" id="signupOtherName" name="last_name" placeholder="Enter your Other name">
+        </div>
+
+
+
+
         <div class="form-group">
           <label for="signupEmail">Email or Phone</label>
           <input type="text" id="signupEmail" name="email_or_phone" placeholder="Enter email or phone" required>

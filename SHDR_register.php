@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "secure_login_system";
+$dbname = "SHDR_users";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -17,15 +17,13 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
+    $name = $_POST['name'];
     $email_or_phone = $_POST['email_or_phone'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $user_role = $_POST['user_role'];
-    $name = $first_name . ' ' . $last_name; // Combine first and last name to create a full name
 
     // Check for duplicate email
-    $sql = "SELECT * FROM users WHERE email_or_phone = '$email_or_phone'";
+    $sql = "SELECT * FROM SHDR_users WHERE email_or_phone = '$email_or_phone'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -36,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Check for existing admin account
     if ($user_role === 'Admin') {
-        $sql = "SELECT * FROM users WHERE user_role = 'Admin'";
+        $sql = "SELECT * FROM SHDR_users WHERE user_role = 'Admin'";
         $result = $conn->query($sql);
 
         if ($result->num_rows >= 2) {
@@ -47,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // Insert new user
-    $sql = "INSERT INTO users (first_name, last_name, email_or_phone, password, user_role, name) VALUES ('$first_name', '$last_name', '$email_or_phone', '$password', '$user_role', '$name')";
+    $sql = "INSERT INTO SHDR_users (name, email_or_phone, password, user_role) VALUES ('$name', '$email_or_phone', '$password', '$user_role')";
     if ($conn->query($sql) === TRUE) {
         echo "Account created successfully.";
     } else {

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+    header("Location: SHDR.php");
     exit();
 }
 ?>
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Profile | Brilliant Researchers Africa</title>
+  <title>Edit Profile | SUSTAINABLE HOMES DESIGNS RWANDA LTD</title>
   <style>
     /* Internal CSS */
     body {
@@ -25,7 +25,7 @@ if (!isset($_SESSION['user_id'])) {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #003366;
+      background-color:rgb(3, 102, 0);
       color: white;
       padding: 10px 20px;
     }
@@ -39,7 +39,7 @@ if (!isset($_SESSION['user_id'])) {
     }
     .sidebar {
       width: 250px;
-      background-color: #002244;
+      background-color:rgb(0, 68, 23);
       color: white;
       padding: 20px 0;
     }
@@ -59,14 +59,14 @@ if (!isset($_SESSION['user_id'])) {
     }
     .sidebar ul li a.active,
     .sidebar ul li a:hover {
-      background-color: #0056b3;
+      background-color:rgb(2, 111, 16);
       border-radius: 5px;
     }
     .content {
       flex: 1;
       padding: 20px;
       background-color: white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 5px rgba(9, 34, 1, 0.1);
       margin: 20px;
       border-radius: 5px;
     }
@@ -98,13 +98,13 @@ if (!isset($_SESSION['user_id'])) {
     form button {
       padding: 10px;
       border: none;
-      background-color: #003366;
+      background-color:rgb(0, 102, 10);
       color: white;
       border-radius: 5px;
       cursor: pointer;
     }
     form button:hover {
-      background-color: #0056b3;
+      background-color:rgb(3, 65, 1);
     }
     .edit-icon {
       position: absolute;
@@ -124,10 +124,10 @@ if (!isset($_SESSION['user_id'])) {
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="dashboard.php">Home</a></li>
-        <li><a href="feedback.php">Feedback</a></li>
-        <li><a href="neededmat.php">Needed Materials</a></li>
-        <li><a href="edit-profile.php" class="active">Edit Profile</a></li>
+        <li><a href="SHDR_userdashboard.php">Home</a></li>
+        <li><a href="SHDR_feedback.php">Feedback</a></li>
+        <li><a href="SHDR_neededmat.php">Needed Materials</a></li>
+        <li><a href="SHDR_edit-profile.php" class="active">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">
@@ -162,7 +162,7 @@ if (!isset($_SESSION['user_id'])) {
         .then(response => response.json())
         .then(data => {
           document.getElementById("name").value = data.name;
-          document.getElementById("email_or_phone").value = data.email;
+          document.getElementById("email").value = data.email;
           document.getElementById("phone").value = data.phone;
         })
         .catch(error => console.error('Error fetching profile:', error));
@@ -190,7 +190,7 @@ if (!isset($_SESSION['user_id'])) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, email_or_phone })
+        body: JSON.stringify({ name, email, phone })
       })
       .then(response => response.json())
       .then(data => {

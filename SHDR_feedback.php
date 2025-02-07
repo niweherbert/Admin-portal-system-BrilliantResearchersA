@@ -4,7 +4,7 @@ session_start();
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     // If not logged in, redirect to the login page
-    header("Location: index.php");
+    header("Location: SHDR.php");
     exit();
 }
 
@@ -16,10 +16,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback | Brilliant Researchers Africa</title>
+  <title>Feedback | SUSTAINABLE HOMES DESIGNS RWANDA LTD</title>
   <style>
-    /* Internal CSS */
-    body {
+   body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
@@ -29,7 +28,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #003366;
+      background-color:rgb(0, 102, 54);
       color: white;
       padding: 10px 20px;
     }
@@ -37,47 +36,147 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
       font-size: 1.2rem;
       margin: 0;
     }
+    .logout-icon {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .logout-icon img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+    .logout-icon span {
+      font-size: 0.9rem;
+    }
     .container {
       display: flex;
       min-height: 100vh;
     }
     .sidebar {
       width: 250px;
-      background-color: #002244;
-      color: white;
-      padding: 20px 0;
+      background-color:rgb(0, 71, 24);
+      color: #fff;
+      padding-top: 20px;
     }
     .sidebar ul {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
     .sidebar ul li {
-      padding: 15px 20px;
+      margin: 10px 0;
     }
     .sidebar ul li a {
-      color: white;
+      color: #fff;
       text-decoration: none;
+      padding: 10px;
       display: block;
-      font-size: 1rem;
     }
-    .sidebar ul li a.active,
-    .sidebar ul li a:hover {
-      background-color: #0056b3;
-      border-radius: 5px;
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background-color:rgb(0, 63, 28);
     }
     .content {
       flex: 1;
       padding: 20px;
-      background-color: white;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      margin: 20px;
-      border-radius: 5px;
     }
-    .content h2 {
-      margin-top: 0;
+    form label {
+      display: block;
+      margin-bottom: 10px;
     }
-    textarea {
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      padding: 10px 15px;
+      background-color:rgb(0, 102, 31);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background-color:rgb(0, 71, 15);
+    }
+
+
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        padding-top: 10px;
+      }
+
+      .content {
+        padding: 10px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      header h1 {
+        font-size: 1rem;
+      }
+
+      .logout-icon span {
+        display: none;
+      }
+
+      .sidebar ul li a {
+        font-size: 0.9rem;
+      }
+
+      form input,
+      form textarea,
+      form button {
+        font-size: 14px;
+      }
+    }
+
+
+
+/* styles to handle to toggle */
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100%;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  #sidebarToggle {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #sidebarToggle {
+    display: none;
+  }
+}
+
+
+textarea {
       width: 100%;
       resize: none;
       padding: 10px;
@@ -88,22 +187,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
       background-color: #f4f4f4;
       color: #666;
     }
-    button {
-      padding: 10px;
-      border: none;
-      background-color: #003366;
-      color: white;
-      font-size: 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    p {
-      font-size: 1rem;
-      margin-top: 20px;
-    }
+
   </style>
 </head>
 <body>
@@ -113,10 +197,10 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'User';
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="dashboard.php">Home</a></li>
-        <li><a href="feedback.php" class="active">Feedback</a></li>
-        <li><a href="neededmat.php">Needed Materials</a></li>
-        <li><a href="edit-profile.php">Edit Profile</a></li>
+        <li><a href="SHDR_userdashboard.php">Home</a></li>
+        <li><a href="SHDR_feedback.php" class="active">Feedback</a></li>
+        <li><a href="SHDR_neededmat.php">Needed Materials</a></li>
+        <li><a href="SHDR_edit-profile.php">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">

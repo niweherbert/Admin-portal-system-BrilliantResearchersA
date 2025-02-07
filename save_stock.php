@@ -15,38 +15,19 @@ if ($conn->connect_error) {
 // Get the JSON data from the request
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Debugging: Check if data is received correctly
-if ($data === null) {
-    echo json_encode(['success' => false, 'error' => 'No JSON data received']);
-    $conn->close();
-    exit();
-}
-
-// Debugging: Log received data
-error_log("Received data: " . print_r($data, true));
-
 if (isset($data['name']) && isset($data['quantity']) && isset($data['type'])) {
     $name = $data['name'];
     $quantity = $data['quantity'];
     $type = $data['type'];
 
     // Prepare SQL statement
-    $stmt = $conn->prepare("INSERT INTO materials (name, quantity, type) VALUES (?, ?, ?)");
-    if ($stmt === false) {
-        echo json_encode(['success' => false, 'error' => 'Prepare failed: ' . $conn->error]);
-        $conn->close();
-        exit();
-    }
+    $sql = "INSERT INTO stock (name, quantity, type) VALUES ('$name', '$quantity', '$type')";
 
-    $stmt->bind_param("sis", $name, $quantity, $type);
-
-    if ($stmt->execute()) {
+    if ($conn->query($sql) === TRUE) {
         echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['success' => false, 'error' => $stmt->error]);
+        echo json_encode(['success' => false, 'error' => $conn->error]);
     }
-
-    $stmt->close();
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid input']);
 }

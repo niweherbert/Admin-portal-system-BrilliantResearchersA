@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+    header("Location: SHDR.php");
     exit();
 }
 ?>
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <button id="sidebarToggle">☰</button>
-  <title>Dashboard | Brilliant Researchers Africa</title>
+  <title>Dashboard | SUSTAINABLE HOMES DESIGNS RWANDA LTD</title>
   <style>
     body {
       margin: 0;
@@ -24,7 +24,7 @@ if (!isset($_SESSION['user_id'])) {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: #003366;
+      background-color:rgb(0, 102, 54);
       color: white;
       padding: 10px 20px;
     }
@@ -51,7 +51,7 @@ if (!isset($_SESSION['user_id'])) {
     }
     .sidebar {
       width: 250px;
-      background-color: #002147;
+      background-color:rgb(0, 71, 24);
       color: #fff;
       padding-top: 20px;
     }
@@ -70,7 +70,7 @@ if (!isset($_SESSION['user_id'])) {
     }
     .sidebar ul li a:hover,
     .sidebar ul li a.active {
-      background-color: #001f3f;
+      background-color:rgb(0, 63, 28);
     }
     .content {
       flex: 1;
@@ -91,14 +91,14 @@ if (!isset($_SESSION['user_id'])) {
     }
     form button {
       padding: 10px 15px;
-      background-color: #003366;
+      background-color:rgb(0, 102, 31);
       color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
     }
     form button:hover {
-      background-color: #002147;
+      background-color:rgb(0, 71, 15);
     }
 
 
@@ -171,60 +171,12 @@ if (!isset($_SESSION['user_id'])) {
   }
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-  }
-  .logo {
-    height: 50px;
-    margin-right: 10px;
-  }
-
-
-
-
-
-
-
-
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    padding: 10px;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: block;
-}
-
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
-    background-color:rgba(1, 8, 46, 0.41);
-}
-
-
-
-
-
-
-
-
-
-
 
   </style>
 </head>
 <body>
-  <header>  <div class="logo-container">
-      <img src="BRA.png" alt="Company Logo" class="logo">
-     
-    <h1>Brilliant Researchers Africa</h1> </div>
+  <header>
+    <h1>SUSTAINABLE HOMES DESIGNS RWANDA LTD</h1>
     <div class="logout-icon" onclick="confirmLogout()">
       <img src="https://img.icons8.com/ios-glyphs/30/ffffff/logout-rounded.png" alt="Logout Icon">
       <span>Logout</span>
@@ -233,40 +185,21 @@ if (!isset($_SESSION['user_id'])) {
   <div class="container">
     <nav class="sidebar">
       <ul>
-        <li><a href="dashboard.php" class="active">Home</a></li>
-        <li><a href="neededmat.php">Needed Materials</a></li>
-        <li><a href="leave_Permission.php">Leave & Permission</a></li> 
-        <li><a href="feedback.php">Feedback</a></li>
-        <li><a href="edit-profile.php">Edit Profile</a></li>
+        <li><a href="SHDR_userdashboard.php" class="active">Home</a></li>
+        <li><a href="SHDR_feedback.php">Feedback</a></li>
+        <li><a href="SHDR_neededmat.php">Needed Materials</a></li>
+        <li><a href="SHDR_edit-profile.php">Edit Profile</a></li>
       </ul>
     </nav>
     <main class="content">
       <h2>Daily Report</h2>
-      <form id="work-log-form" action="submit_report.php" method="POST" enctype="multipart/form-data">
+      <form id="work-log-form" action="SHDR_submit_report.php" method="POST" enctype="multipart/form-data">
         <label>First Name: <input type="text" id="first-name" name="first_name" placeholder="Enter your first name" required /></label>
         <label>Last Name: <input type="text" id="last-name" name="last_name" placeholder="Enter your last name" required /></label>
         <label>Date: <input type="date" name="date" required /></label>
-        <label>Time Arrived: <input type="time" name="time_arrived" required /></label>
-        <label>Time Left: <input type="time" name="time_left" required /></label>
-        <label>
-          Weekly Transport Fee:
-          <input type="checkbox" name="transport_fee" id="transport-fee">
-          <input type="number" name="transport_amount" id="transport-amount" placeholder="Amount" disabled>
-        </label>
+       
 
-
-        <label for="lunch">Lunch Issued: </label>
-<select name="lunch" id="lunch">
-    <option value="">Select Type</option>
-    <option value="No">No</option>
-    <option value="Yes">Yes</option>
-</select><br><br>
-
-
-
-
-
-        <label>Task Performed/Skill Gained:<textarea name="tasks_performed" placeholder="Type here..." required></textarea></label>
+        <label>Task Performed:<textarea name="tasks_performed" placeholder="Type here..." required></textarea></label>
         <label>Upload File:<input type="file" name="file_upload" /></label>
         <label>Supervisor Name:<input type="text" name="supervisor_name" placeholder="Enter supervisor's name" required /></label>
         <button type="submit">Submit</button>
@@ -288,7 +221,7 @@ document.getElementById('sidebarToggle').addEventListener('click', function() {
     function confirmLogout() {
       const confirmation = confirm("Are you sure you want to log out?");
       if (confirmation) {
-        window.location.href = "index.php";
+        window.location.href = "SHDR.php";
       }
     }
 
@@ -367,14 +300,6 @@ document.getElementById('sidebarToggle').addEventListener('click', function() {
     }
 
     document.addEventListener('DOMContentLoaded', fetchMaterials);
-
-    document.getElementById('work-log-form').addEventListener('submit', function(event) {
-        var lunch = document.getElementById('lunch').value;
-        if (lunch !== 'Yes' && lunch !== 'No') {
-            alert('Please select a valid option for Lunch Issued.');
-            event.preventDefault();
-        }
-    });
   </script>
 </body>
 </html>

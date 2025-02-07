@@ -159,7 +159,7 @@ session_start();
     <!-- Login Form -->
     <div id="loginForm">
       <h2>LOGIN</h2>
-      <form action="login.php" method="POST">
+      <form action="SHDR_login.php" method="POST">
         <div class="form-group">
           <label for="loginEmail">Email or Phone</label>
           <input type="text" id="loginEmail" name="email_or_phone" placeholder="Enter email or phone" required>
@@ -197,7 +197,7 @@ session_start();
     <!-- Signup Form -->
     <div id="signupForm" style="display: none;">
       <h2>CREATE ACCOUNT</h2>
-      <form action="register.php" method="POST">
+      <form action="SHDR_register.php" method="POST">
         <div class="form-group">
           <label for="signupName">Name</label>
           <input type="text" id="signupName" name="name" placeholder="Enter your name" required>
