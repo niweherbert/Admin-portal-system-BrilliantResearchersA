@@ -213,7 +213,7 @@ session_start();
            required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" style="padding-right: 30px;">
     <i id="togglePassword" class="fa fa-eye" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
   </div>
-  <small style="color: #1E90FF; display: block; margin-top: 5px;">Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</small>
+  <small style="color: #1E90FF; display: block; margin-top: 5px;">Password must be at least 8 characters long, contain at least one uppercase letter,lowercase letter,digit, and special character.</small>
 </div>
 
 <div class="form-group">

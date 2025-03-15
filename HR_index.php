@@ -8,7 +8,7 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Brilliant Researchers Africa</title>
+  <title>HR Dashboard</title>
   <style>
 
 
@@ -24,7 +24,7 @@ session_start();
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(to bottom right, #87CEEB, #1E90FF);
+      background: linear-gradient(to bottom right,rgb(90, 136, 152),rgb(21, 21, 22));
     }
 
     .container {
@@ -81,7 +81,7 @@ session_start();
     }
 
     .links a {
-      color: #1E90FF;
+      color:rgb(3, 5, 75);
       text-decoration: none;
       font-size: 12px;
     }
@@ -139,9 +139,10 @@ session_start();
   }
 
   .logo {
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
-    max-height: 100px; /* Adjust this value as needed */
+    max-height: 90px; /* Adjust this value as needed */
+    margin: 0 10px; /* Add spacing between logos */
   }
 
 
@@ -150,15 +151,16 @@ session_start();
   </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <div class="logo-container">
       <img src="BRA.png" alt="SHDR Logo" class="logo">
+      <img src="SHDR.png.png" alt="Second Logo" class="logo">
     </div>
 
     <!-- Login Form -->
     <div id="loginForm">
-      <h2>LOGIN</h2>
-      <form action="login.php" method="POST">
+      <h2>LOGIN TO HR Dashboard</h2><br>
+      <form action="HR_login.php" method="POST">
         <div class="form-group">
           <label for="loginEmail">Email or Phone</label>
           <input type="text" id="loginEmail" name="email_or_phone" placeholder="Enter email or phone" required>
@@ -167,18 +169,8 @@ session_start();
           <label for="loginPassword">Enter Password</label>
           <input type="password" id="loginPassword" name="password" placeholder="Enter password" required>
         </div>
-        <div class="form-group">
-          <label for="loginRole">User Role</label>
-          <select id="loginRole" name="user_role" required>
-            <option value="">Select Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-            <option value="Intern">Intern</option>
-            <option value="Trainer">Trainer</option>
-          </select>
-        </div>
         <div class="links">
-          <a href="forgot_password.php">Forgot password?</a>
+          <a href="HR_forgot_password.php">Forgot password?</a>
         </div>
         <div class="form-group">
           <button type="submit">Login</button>
@@ -192,7 +184,7 @@ session_start();
     <!-- Signup Form -->
     <div id="signupForm" style="display: none;">
       <h2>CREATE ACCOUNT</h2>
-      <form action="register.php" method="POST">
+      <form action="HR_register.php" method="POST">
         <div class="form-group">
         <label for="signupFirstName">First Name</label>
           <input type="text" id="signupFirstName" name="first_name" placeholder="Enter your first name" required>
@@ -222,7 +214,7 @@ session_start();
            required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" style="padding-right: 30px;">
     <i id="togglePassword" class="fa fa-eye" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
   </div>
-  <small style="color: #1E90FF; display: block; margin-top: 5px;">Password must be at least 8 characters long, contain at least one uppercase letter,lowercase letter,digit and special character.</small>
+  <small style="color: #1E90FF; display: block; margin-top: 5px;">Password must be at least 8 characters long, contain at least one uppercase letter,lowercase letter,digit, and special character.</small>
 </div>
 
 <div class="form-group">
@@ -230,49 +222,6 @@ session_start();
   <input type="password" id="confirmPassword" placeholder="Confirm password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}">
 </div>
 
-        <div class="form-group">
-          <label for="signupRole">User Role</label>
-          <select id="signupRole" name="user_role" onchange="showSubRoles()" required>
-            <option value="">Select Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-            <option value="Intern">Intern</option>
-            <option value="Trainer">Trainer</option>
-          </select>
-        </div>
-        <div class="form-group" id="subRoleGroup" style="display: none;">
-          <label for="subRole">Specialization</label>
-          <select id="subRole" name="specialization" onchange="showFinalRoles()">
-            <option value="">Select Specialization</option>
-            <option value="Physician">Physicist</option>
-            <!-- Add other specializations as needed -->
-            <option value="Chemist">Chemist</option>
-            <option value="IT">IT</option>
-            <option value="Mechanical">Mechanical</option>
-            <option value="Electrical">Electrical</option>
-            <option value="Architecture">Architecture</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group" id="finalRoleGroup" style="display: none;">
-          <label for="finalRole">Role</label>
-          <select id="finalRole" name="role">
-            <option value="">Select Final Role</option>
-            <option value="CEO">CEO</option>
-            <option value="Manager">Manager</option>
-            <option value="Researcher">Researcher</option>
-            <option value="Trainer">Trainer</option>
-            <option value="Engineer">Engineer</option>
-            <option value="Technician">Technician</option>
-            <option value="Designer">Designer</option>
-            <option value="Developer">Developer</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-group" id="finalRoleGroup" style="display: none;">
-          <label for="finalRole">Final Role</label>
-          <input type="text" id="finalRole" name="final_role" placeholder="Enter your final role">
-        </div>
         <div class="form-group">
           <button type="submit">Sign Up</button>
         </div>

@@ -97,9 +97,6 @@ if (!isset($_SESSION['user_id'])) {
     height: 50px;
     margin-right: 10px;
   }
-
-
-
   </style>
 </head>
 <body>
@@ -119,6 +116,7 @@ if (!isset($_SESSION['user_id'])) {
         <li><a href="stock.php">Store & Requisition</a></li>
         <li><a href="search.php">Search</a></li> 
         <li><a href="leavepermission_request.php">Leave and Permission Request</a></li>
+        <li><a href="approve_pending_account.php">Approve Pending Account Creation</a></li> 
         <li><a href="edit_profile.php">Edit Profile</a></li>
        
       </ul>

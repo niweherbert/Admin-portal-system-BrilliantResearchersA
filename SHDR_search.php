@@ -107,7 +107,7 @@ if (!isset($_SESSION['user_id'])) {
             text-align: left;
         }
         th {
-            background-color:rgb(0, 255, 38);
+            background-color:rgb(3, 107, 18);
             color: white;
         }
         tr:nth-child(even) {
@@ -224,7 +224,7 @@ if (!isset($_SESSION['user_id'])) {
         .feedback-container button {
             margin-top: 10px;
             padding: 10px 15px;
-            background-color:rgb(0, 255, 85);
+            background-color:rgb(4, 189, 66);
             color: white;
             border: none;
             border-radius: 5px;
@@ -269,10 +269,6 @@ if (!isset($_SESSION['user_id'])) {
     .nested-dropdown-content a:hover {
         background-color: #f1f1f1;
     }
-
-
-
-
 
 
     </style>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include 'HR_db.php';
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -24,12 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['first_name'] = $user['first_name'];
                 $_SESSION['last_name'] = $user['last_name'];
 
-                // Redirect based on user role
-                if ($user['user_role'] == 'Admin') {
-                    header("Location: admindashb.php");
-                } else {
-                    header("Location: dashboard.php");
-                }
+                // Redirect to dashboard
+                header("Location: HR_dashb.php");
                 exit();
             } else {
                 echo "Invalid password.";

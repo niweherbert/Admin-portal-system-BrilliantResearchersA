@@ -34,22 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
 
-    // Check for existing admin account
-    if ($user_role === 'Admin') {
-        $sql = "SELECT * FROM users WHERE user_role = 'Admin'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows >= 2) {
-            echo "You are not allowed to create more than 2 admin accounts.";
-            $conn->close();
-            exit();
-        }
-    }
-
-    // Insert new user
-    $sql = "INSERT INTO users (first_name, last_name, email_or_phone, password, user_role, name) VALUES ('$first_name', '$last_name', '$email_or_phone', '$password', '$user_role', '$name')";
+    // Insert new user with pending status
+    $sql = "INSERT INTO users (first_name, last_name, email_or_phone, password, user_role, name, status) VALUES ('$first_name', '$last_name', '$email_or_phone', '$password', '$user_role', '$name', 'pending')";
     if ($conn->query($sql) === TRUE) {
-        echo "Account created successfully.";
+        echo "Account created successfully. Please wait for admin approval.";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
